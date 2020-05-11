@@ -1,22 +1,43 @@
-def operator_reader(operator):
-    """ Simplifies extended operators, not much usefull now"""
-    minuses = operator.count('-')
-    if minuses % 2 == 0:
-        return '+'
-    else:
-        return '-'
+class SmartCalculator:
+
+    def __init__(self):
+        self.usr_input = None
+
+    def check_command(self, command):
+        if command == "/help":
+            self.print_help()
+        elif command == "/exit":
+            return True
+        else:
+            print("Unknown command")
+        return False
+
+    @staticmethod
+    def check_expression(expression):
+        try:
+            print(eval(expression))
+        except (SyntaxError, NameError):
+            print("Invalid expression")
+
+    @staticmethod
+    def print_help():
+        print("The program calculates the sum and difference of numbers. Type '/exit' to exit")
+
+    def main(self):
+        self.usr_input = input()
+        while True:
+            if len(self.usr_input) == 0:
+                pass
+            elif self.usr_input.startswith("/"):
+                to_break = self.check_command(self.usr_input)
+                if to_break:
+                    break
+            else:
+                self.check_expression(self.usr_input)
+            self.usr_input = input()
+        print("Bye!")
 
 
-while True:
-    text = input()
-    if text == '/exit': break
-    if text == '/help': print("The program calculates the sum of numbers, and is capable of processing double negatives")
-    if text == '': continue
-    tokens = text.split()
-    total = int(tokens[0])
-    operations = zip(tokens[1::2], tokens[2::2])  # Expected structure
-    for operator, value in operations:
-        operator = operator_reader(operator)
-        total += int(operator + str(value))
-    print(total)
-print('Bye!')
+if __name__ == "__main__":
+    calc = SmartCalculator()
+    calc.main()
